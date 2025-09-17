@@ -1,1 +1,36 @@
-composer install --no-dev --optimize-autoloader
+name: Build vendor
+
+on:
+  workflow_dispatch: {}   # run manually
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: curl, mbstring, openssl
+
+      - name: Install Composer (local phar)
+        run: |
+          php -r "copy('https://getcomposer.org/installer','composer-setup.php');"
+          php composer-setup.php --install-dir=. --filename=composer.phar
+          php -r "unlink('composer-setup.php');"
+
+      - name: Install dependencies (no-dev, optimized)
+        run: php composer.phar install --no-dev --optimize-autoloader
+
+      - name: Zip vendor + composer files
+        run: zip -r vendor.zip vendor composer.json composer.lock
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vendor-artifact
+          path: vendor.zip
