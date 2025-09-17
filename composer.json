@@ -1,0 +1,22 @@
+{
+  "name": "netloftc/api",
+  "description": "Minimal API project with Guzzle, phpdotenv, and Monolog",
+  "type": "project",
+  "require": {
+    "php": "^8.1",
+    "guzzlehttp/guzzle": "^7",
+    "vlucas/phpdotenv": "^5",
+    "monolog/monolog": "^3"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}
